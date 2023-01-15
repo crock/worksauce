@@ -130,46 +130,40 @@ def create_directory_listing(sites):
             html += f"""
 <li><a href="/{datestamp}/index.html">{datestamp}</a></li>
 """
-            html += """
+        html += """
 </ul>
 <ul class="grid sites">
 """
-            for site in sites:
-                domain = site["domain"]
-                title = site["title"]
-                description = site["description"]
+        for site in sites:
+            domain = site["domain"]
+            title = site["title"]
+            description = site["description"]
 
-                pageSlug = re.sub(r"\.+", "-", domain)
+            pageSlug = re.sub(r"\.+", "-", domain)
 
-                html += f"""
+            html += f"""
 <li class="soft-shadow">
-    <div class="img-preview">
-        <a href="{get_screenshot_public_path(site)}" target="_blank">
-            View Full Size
-        </a>
-        <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
-    </div>
-    <a href="/{now}/{pageSlug}/index.html">{domain}</a>
-    <p>{title}</p>
+<div class="img-preview">
+    <a href="{get_screenshot_public_path(site)}" target="_blank">
+        View Full Size
+    </a>
+    <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
+</div>
+<a href="/{now}/{pageSlug}/index.html">{domain}</a>
+<p>{title}</p>
 </li>
 """
-            html += """
+        html += """
 </ul>
 """
-            pageContent = generate_page_html(f"Home - {now}", html, "Showcase and archive of the top-ranked web developer portfolios as indexed by Google")
-            outputPath = f"www/{now}/index.html"
-            with open(outputPath, "w") as f:
-                f.write(pageContent)
-                if not os.path.exists(outputPath):
-                    print(f"Created directory index at {outputPath}") 
+        pageContent = generate_page_html(f"Home - {now}", html, "Showcase and archive of the top-ranked web developer portfolios as indexed by Google")
+        outputPath = f"www/{now}/index.html"
+        with open(outputPath, "w") as f:
+            f.write(pageContent)
+            print(f"Created directory index at {outputPath}") 
 
 def create_index_page(sites):
-    # get list of json files in directory
-    files = [f for f in os.listdir("data") if f.endswith(".json")]
-    # sort by date
-    files.sort(key=lambda x: os.path.getmtime(os.path.join("data", x)))
-
-    datestamps = list(map(lambda x: x.split("-")[0], files))
+    datestamps = get_datestamps()
 
     html = f"""
 <h1>Dev Portfolio Showcase</h1>
@@ -235,8 +229,8 @@ def main():
 
         pageContent = generate_page_html(f"Viewing {domain}", html, description)
         create_site_page(pageSlug, pageContent)
-    create_index_page(sites)
     create_directory_listing(sites)
+    create_index_page(sites)
     copy_assets()
     copy_images()
 
