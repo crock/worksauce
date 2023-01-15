@@ -57,6 +57,35 @@ def generate_iframe_html(src, title = ""):
 <iframe src="{src}" title="{title}" frameborder="0" allowfullscreen width="100%" height="720"></iframe>
 """
 
+def generate_disqus_html(site):
+    domain = site["domain"]
+    html = """
+<div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*$
+    var disqus_config = function () {
+"""
+    html += f"""
+    this.page.url = "https://worksauce.com/{now}/{domain}";  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = "{now}_{domain}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+"""
+    html += """
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://worksauce.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+"""
+    return html
+
 def create_site_page(name, html):
     outputPath = f"www/{now}/{name}/index.html"
     os.makedirs(os.path.dirname(outputPath), exist_ok=True)
@@ -225,6 +254,7 @@ def main():
 <h1>{title}</h1>
 <p>{description}</p>
 {generate_iframe_html(f"https://{domain}/", title)}
+{generate_disqus_html(site)}
 """
 
         pageContent = generate_page_html(f"Viewing {domain}", html, description)
