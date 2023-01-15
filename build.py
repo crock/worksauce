@@ -26,11 +26,11 @@ def main():
     datestamps = list(map(lambda x: x.split("-")[0], files))
 
     for datestamp in datestamps:
-        # print(f"Getting screenshots of sites for {datestamp}...")
-        # if os.path.exists(f"screenshots/{datestamp}"):
-        #     print(f"Skipping screenshots for {datestamp}, already exists")
-        # else:
-        #     os.system(f"webscreenshot -i data/{datestamp}-domains.txt -r phantomjs -o screenshots/{datestamp} --crop '0,0,1280,720' -f 'jpg' -v")
+        print(f"Getting screenshots of sites for {datestamp}...")
+        if os.path.exists(f"screenshots/{datestamp}"):
+            print(f"Skipping screenshots for {datestamp}, already exists")
+        else:
+            os.system(f"webscreenshot -i data/{datestamp}-domains.txt -r phantomjs -o screenshots/{datestamp} --crop '0,0,1280,720' -f 'jpg' -v")
 
         print(f"Generating site for {datestamp}...")
         os.system(f"python site-generator.py {datestamp}")

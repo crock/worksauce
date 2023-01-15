@@ -68,14 +68,16 @@ def create_site_page(name, html, directoryListing = False):
     with open(outputPath, "w") as f:
         f.write(html)
         print(f"Created {name} at {outputPath}")
-    with open("www/index.html", "w") as f:
-        f.write(html)
-        print(f"Created homepage at www/index.html")
 
 def copy_assets():
     os.makedirs("www/assets", exist_ok=True)
     os.system("rsync -r assets/* www/assets")
     print("Copied assets to www/assets")
+
+def copy_images():
+    os.makedirs("www/img", exist_ok=True)
+    os.system("rsync -r screenshots/* www/img")
+    print("Copied screenshots to www/img")
 
 def get_screenshot_public_path(site):
     domain = site["domain"]
@@ -136,7 +138,9 @@ def create_index_page(sites):
 </ul>
 """
     pageContent = generate_page_html("Home", html, "Showcase and archive of the top-ranked web developer portfolios as indexed by Google")
-    create_site_page(None, pageContent, directoryListing=True)
+    with open("www/index.html", "w") as f:
+        f.write(pageContent)
+        print(f"Created homepage at www/index.html")
 
 def main():
     path = os.path.join("data", f"{now}-sites.json")
@@ -162,6 +166,7 @@ def main():
         create_site_page(pageSlug, pageContent)
     create_index_page(sites)
     copy_assets()
+    copy_images()
 
 if __name__ == '__main__':
     main()
