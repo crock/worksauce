@@ -48,6 +48,7 @@ gtag('config', 'G-2BHVK54E8T');
 <body>
     {content}
     <script src="/assets/script.js"></script>
+    <script id="dsq-count-scr" src="//worksauce.disqus.com/count.js" async></script>
 </body>
 </html>
 """
@@ -178,7 +179,7 @@ def create_directory_listing(sites):
     </a>
     <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
 </div>
-<a href="/{now}/{pageSlug}/index.html">{domain}</a>
+<a href="/{now}/{pageSlug}/index.html#disqus_thread">{domain}</a>
 <p>{title}</p>
 </li>
 """
@@ -224,7 +225,7 @@ def create_index_page(sites):
         </a>
         <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
     </div>
-    <a href="/{now}/{pageSlug}/index.html">{domain}</a>
+    <a href="/{now}/{pageSlug}/index.html#disqus_thread">{domain}</a>
     <p>{title}</p>
 </li>
 """
