@@ -4,18 +4,18 @@ import os
 import time
 from datetime import datetime
 
-if len(sys.argv) < 2:
+if len(sys.argv) > 1:
+    now = sys.argv[1]
+else:
     now = datetime.now().strftime("%Y%m%d")
     print(f"No specific date in the format YYYYMMDD, using current date: {now}")
-else:
-    now = sys.argv[1]
 
 def main():
     print("Starting build...")
     startTime = time.time()
-    if not os.path.exists(f"data/{now}-sites.json"):
-        os.system("python search-result-extractor.py")
     if not os.path.exists(f"data/{now}-domains.txt"):
+        os.system("python search-result-extractor.py")
+    if not os.path.exists(f"data/{now}-sites.json"):
         os.system("python meta-extractor.py")
 
     # get list of json files in directory

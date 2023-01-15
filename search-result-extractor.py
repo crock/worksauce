@@ -7,12 +7,12 @@ from datetime import datetime
 
 domains = []
 
-if len(sys.argv) < 2:
+if len(sys.argv) > 1:
+    now = sys.argv[1]
+else:
     now = datetime.now().strftime("%Y%m%d")
     print(f"No specific date in the format YYYYMMDD, using current date: {now}")
-else:
-    now = sys.argv[1]
-
+    
 def filter_links(links):
     filtered_links = []
     for link in links:

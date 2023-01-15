@@ -4,11 +4,11 @@ import os
 import sys
 from datetime import datetime
 
-now = datetime.now().strftime("%Y%m%d")
-
-if sys.argv[1]:
+if len(sys.argv) > 1:
     now = sys.argv[1]
-    print(f"Using date: {now}")
+else:
+    now = datetime.now().strftime("%Y%m%d")
+    print(f"No specific date in the format YYYYMMDD, using current date: {now}")
 
 def inline_stylesheet():
     with open("assets/global.css") as f:
