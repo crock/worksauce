@@ -77,30 +77,18 @@ def copy_assets():
     os.system("rsync -r assets/* www/assets")
     print("Copied assets to www/assets")
 
-def copy_images():
-    os.makedirs("www/img", exist_ok=True)
-    os.system("rsync -r screenshots/* www/img")
-    print("Copied screenshots to www/img")
-
 def get_screenshot_public_path(site):
     domain = site["domain"]
     filename = f"http_{domain}_80.jpg"
-    screenshotPath = f"screenshots/{now}/{filename}"
-    if not os.path.exists(screenshotPath):
-        print(f"Screenshot not found for {domain}")
-        return "/assets/no-preview-available.png"
+    screenshotPath = f"/img/{now}/{filename}"
     
-    return f"/img/{now}/{filename}"
+    return screenshotPath
 
 def get_thumbnail_public_path(site):
-    domain = site["domain"]
-    filename = f"http_{domain}_80-thumbnail.jpg"
-    screenshotPath = f"screenshots/{now}/{filename}"
-    if not os.path.exists(screenshotPath):
-        print(f"Thumbnail not found for {domain}")
-        return get_screenshot_public_path(site)
+    publicPath = get_screenshot_public_path(site)
+    screenshotPath = f"{publicPath}?nf_resize=fit&w=350"
     
-    return f"/img/{now}/{filename}"
+    return screenshotPath
 
 def create_index_page(sites):
     # get list of json files in directory
@@ -174,7 +162,6 @@ def main():
         create_site_page(pageSlug, pageContent)
     create_index_page(sites)
     copy_assets()
-    copy_images()
 
 if __name__ == '__main__':
     main()
