@@ -1,0 +1,16 @@
+[build]
+  publish = "www/"
+  command = "python build.py"
+
+[build.environment]
+  PYTHON_VERSION = "3.9.13"
+
+[build.processing.css]
+  minify = true
+[build.processing.js]
+  minify = true
+[build.processing.html]
+  pretty_urls = true
+
+
+

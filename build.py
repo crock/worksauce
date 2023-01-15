@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import sys
+import os
+import time
+from datetime import datetime
+
+if len(sys.argv) < 2:
+    now = datetime.now().strftime("%Y%m%d")
+    print(f"No specific date in the format YYYYMMDD, using current date: {now}")
+else:
+    now = sys.argv[1]
+
+def main():
+    print("Starting build...")
+    startTime = time.time()
+    if not os.path.exists(f"data/{now}-sites.json"):
+        os.system("python search-result-extractor.py")
+    if not os.path.exists(f"data/{now}-domains.txt"):
+        os.system("python meta-extractor.py")
+
+    # get list of json files in directory
+    files = [f for f in os.listdir("data") if f.endswith(".json")]
+    # sort by date
+    files.sort(key=lambda x: os.path.getmtime(os.path.join("data", x)))
+
+    datestamps = list(map(lambda x: x.split("-")[0], files))
+
+    for datestamp in datestamps:
+        print(f"Getting screenshots of sites for {datestamp}...")
+        if os.path.exists(f"screenshots/{datestamp}"):
+            print(f"Skipping screenshots for {datestamp}, already exists")
+        else:
+            os.system(f"webscreenshot -i data/{datestamp}-domains.txt -r phantomjs -o screenshots/{datestamp} --crop '0,0,1280,720' -f 'jpg' -v")
+
+        print(f"Generating site for {datestamp}...")
+        os.system(f"python site-generator.py {datestamp}")
+
+    endTime = time.time()
+    print(f"Build completed in {endTime - startTime} seconds")
+
+
+if __name__ == '__main__':
+    main()
