@@ -57,12 +57,8 @@ def generate_iframe_html(src, title = ""):
 <iframe src="{src}" title="{title}" frameborder="0" allowfullscreen width="100%" height="720"></iframe>
 """
 
-def create_site_page(name, html, directoryListing = False):
+def create_site_page(name, html):
     outputPath = f"www/{now}/{name}/index.html"
-    if not name:
-        outputPath = f"www/{now}/index.html"
-    if directoryListing:
-        outputPath = f"www/{now}/index.html"
     os.makedirs(os.path.dirname(outputPath), exist_ok=True)
 
     with open(outputPath, "w") as f:
@@ -91,6 +87,82 @@ def get_thumbnail_public_path(site):
     screenshotPath = f"{publicPath}?nf_resize=fit&w=350"
     
     return screenshotPath
+
+def get_all_sites():
+    # get list of json files in directory
+    files = [f for f in os.listdir("data") if f.endswith(".json")]
+    # sort by date
+    files.sort(key=lambda x: os.path.getmtime(os.path.join("data", x)))
+
+    allSites = []
+
+    for file in files:
+        with open(f"data/{file}") as f:
+            sites = json.load(f)
+            for site in sites:
+                site["datestamp"] = file.split("-")[0]
+            allSites.extend(sites)
+    
+    return allSites
+
+def get_datestamps():
+    # get list of json files in directory
+    files = [f for f in os.listdir("data") if f.endswith(".json")]
+    # sort by date
+    files.sort(key=lambda x: os.path.getmtime(os.path.join("data", x)))
+
+    datestamps = list(map(lambda x: x.split("-")[0], files))    
+
+    return datestamps   
+    
+
+def create_directory_listing(sites):
+        html = f"""
+<h1>Dev Portfolio Showcase</h1>
+<p>Last Crawled: {now}</p>
+<p>Total websites in showcase: {len(sites)}</p>
+<p>View previous crawls:</p>
+<ul class="previous-crawls">
+"""
+        datestamps = get_datestamps()
+
+        for datestamp in datestamps:
+            html += f"""
+<li><a href="/{datestamp}/index.html">{datestamp}</a></li>
+"""
+        html += """
+</ul>
+<ul class="grid sites">
+"""
+        for site in get_all_sites():
+            domain = site["domain"]
+            title = site["title"]
+            description = site["description"]
+            datestamp = site["datestamp"]
+
+            pageSlug = re.sub(r"\.+", "-", domain)
+
+            html += f"""
+<li class="soft-shadow">
+    <div class="img-preview">
+        <a href="{get_screenshot_public_path(site)}" target="_blank">
+            View Full Size
+        </a>
+        <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
+    </div>
+    <a href="/{datestamp}/{pageSlug}/index.html">{domain}</a>
+    <p>{title}</p>
+</li>
+"""
+            html += """
+</ul>
+"""
+            pageContent = generate_page_html(f"Home - {datestamp}", html, "Showcase and archive of the top-ranked web developer portfolios as indexed by Google")
+            outputPath = f"www/{datestamp}/index.html"
+            with open(outputPath, "w") as f:
+                f.write(pageContent)
+                if not os.path.exists(outputPath):
+                    print(f"Created directory index at {outputPath}") 
 
 def create_index_page(sites):
     # get list of json files in directory
@@ -165,6 +237,7 @@ def main():
         pageContent = generate_page_html(f"Viewing {domain}", html, description)
         create_site_page(pageSlug, pageContent)
     create_index_page(sites)
+    create_directory_listing(sites)
     copy_assets()
     copy_images()
 
