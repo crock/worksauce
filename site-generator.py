@@ -71,7 +71,7 @@ def generate_disqus_html(site):
 """
     html += f"""
     this.page.url = "https://worksauce.com/{now}/{domain}";  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = "{now}_{domain}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    this.page.identifier = "{domain}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
 """
     html += """
     };
