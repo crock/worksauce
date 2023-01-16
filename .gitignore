@@ -32,3 +32,6 @@ venv/
 
 # publish directory
 www/
+
+# archives directory
+archives/
