@@ -169,14 +169,13 @@ def create_directory_listing(sites):
         for site in sites:
             domain = site["domain"]
             title = site["title"]
-            description = site["description"]
 
             pageSlug = re.sub(r"\.+", "-", domain)
 
             html += f"""
 <li class="soft-shadow site-card">
 <div class="img-preview">
-    <a href="{get_screenshot_public_path(site)}" target="_blank" style="{"display:none" if not os.path.exists( f"www/img/{now}/http_{site['domain']}_80.jpg" ) else "display:block"}">
+    <a href="{get_screenshot_public_path(site)}" target="_blank" style="{"display:none" if not os.path.exists( f"www/img/{now}/http_{domain}_80.jpg" ) else "display:block"}">
         <img src="/assets/expand-arrow.png" alt="View full size preview" width={24} />
     </a>
     <img class="preview" src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
@@ -216,19 +215,18 @@ def create_index_page(sites):
     for site in sites:
         domain = site["domain"]
         title = site["title"]
-        description = site["description"]
 
         pageSlug = re.sub(r"\.+", "-", domain)
 
         html += f"""
 <li class="soft-shadow site-card">
     <div class="img-preview">
-        <a href="{get_screenshot_public_path(site)}" target="_blank" style="{"display:none" if not os.path.exists( f"www/img/{now}/http_{site['domain']}_80.jpg" ) else "display:block"}">
+        <a href="{get_screenshot_public_path(site)}" target="_blank" style="{"display:none" if not os.path.exists( f"www/img/{now}/http_{domain}_80.jpg" ) else "display:block"}">
             <img src="/assets/expand-arrow.png" alt="View full size preview" width={24} />
         </a>
-        <img src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
+        <img class="preview" src="{get_thumbnail_public_path(site)}" alt="{domain} screenshot thumbnail" width="512" />
     </div>
-    <a href="/{now}/{pageSlug}/index.html#disqus_thread">{domain}</a>
+    <a href="/{now}/{pageSlug}#disqus_thread">{domain}</a>
     <p>{title}</p>
     <small>{domain}</small>
 </li>
