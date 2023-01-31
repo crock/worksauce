@@ -26,12 +26,8 @@ webscreenshots_failed.txt
 # python virtualenv
 venv/
 
-
 # Local Netlify folder
 .netlify
 
 # publish directory
 www/
-
-# archives directory
-archives/

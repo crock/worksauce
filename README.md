@@ -2,22 +2,30 @@
 
 Showcase and archive of the top-ranked web developer portfolios as indexed by Google
 
+## Pre-Requisites
+
+Please make sure you install `xvfb` before completing the setup steps below.
+On Linux, this can be done with the following command:
+
+> sudo apt-get install xvfb
+
+On macOS, you can install it through downloading and installing the [XQuartz](https://www.xquartz.org) installer.
+
 ## Setup 
 
-1. Download [phantomjs](http://phantomjs.org/download.html)
-2. Create a Python virtual environment 
+1. Create a Python virtual environment 
     
     > python -m venv venv/
 
-3. Activate the virtual environment
+2. Activate the virtual environment
 
     > source venv/bin/activate
 
-4. Install the requirements
+3. Install the requirements
 
     > pip install -r requirements.txt
 
-5. Run the build script
+4. Run the build script
     
     > python build.py
 
@@ -27,6 +35,6 @@ Showcase and archive of the top-ranked web developer portfolios as indexed by Go
 These don't need to be run manually, but are here for reference.
 
 ```bash
-webscreenshot -i data/20230110-domains.txt -r phantomjs -o screenshots/20230110 --crop "0,0,1280,720" -f "jpg" -v
+venv/bin/webscreenshot -i data/20230131-domains.txt -r phantomjs --renderer-binary bin/phantomjs -o screenshots/20230131 --crop "0,0,1280,720" -f "jpg" -v
 ```
 

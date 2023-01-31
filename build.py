@@ -30,7 +30,11 @@ def main():
         if os.path.exists(f"screenshots/{datestamp}"):
             print(f"Skipping screenshots for {datestamp}, already exists")
         else:
-            os.system(f"webscreenshot -i data/{datestamp}-domains.txt -r phantomjs -o screenshots/{datestamp} --crop '0,0,1280,720' -f 'jpg' -v")
+            if os.path.exists("venv/bin/webscreenshot"):
+                binPath = "venv/bin/webscreenshot"
+            else:
+                binPath = "webscreenshot"
+            os.system(f"{binPath} -i data/{datestamp}-domains.txt -r phantomjs --renderer-binary bin/phantomjs -o screenshots/{datestamp} --crop '0,0,1280,720' -f 'jpg' -v")
 
         print(f"Generating site for {datestamp}...")
         os.system(f"python site-generator.py {datestamp}")
